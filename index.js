@@ -6,7 +6,7 @@ const server = http.createServer(); // a regular http server
 server.listen(port);
 console.log('listening on 8000');
 
-//a webSocketServer which listens to what http server has to say 
+tying WS server to HTTP port 
 const wsServer = new webSocketServer({  
     httpServer: server
 });
