@@ -13,8 +13,7 @@ const wsServer = new webSocketServer({
 
 const clients = {};
 
-//note that I'm using same function on client side 
-//to generate a 'username' to keep code simple
+
 const getUniqueID = () => {
     const s4 = () => Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
     return s4() + s4() + '-' + s4();
