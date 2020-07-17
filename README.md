@@ -1,5 +1,5 @@
-# socketed-calculator-client
-A client for the socketed-calculator
+# socketed-calculator
+Socketed-calculator server
 
 The problem:
 "Create a web app (using any programming languages) which logs calculations as they happen and shares those calculations with everyone connected to the website.
