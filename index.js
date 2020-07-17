@@ -13,6 +13,8 @@ const wsServer = new webSocketServer({
 
 const clients = {};
 
+//note that I'm using same function on client side 
+//to generate a 'username' to keep code simple
 const getUniqueID = () => {
     const s4 = () => Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
     return s4() + s4() + '-' + s4();
@@ -21,14 +23,22 @@ const getUniqueID = () => {
 var logs = [];
 
 wsServer.on('request', function (request) {
-    var userID = getUniqueID();
+    var userID = getUniqueID();   
+
     console.log((new Date()) + ' Recieved a new connection from origin ' + request.origin + '.');
+    //console.log('req url is ',request.url);
 
     const connection = request.accept(null, request.origin);
+    //console.log('req url is ',request.url);
     clients[userID] = connection;
     console.log('connected: ' + userID + ' in ' 
     //+ Object.getOwnPropertyNames(clients) //this is a horribly large object that i do not want to log
     );
+
+    //before doing anything, send client their id
+    const userIDobj = {id: userID};
+    clients[userID].sendUTF(JSON.stringify(userIDobj));
+    
 
     //send away all existing logs to this new joinee
     for(var i=0; i<logs.length; i++){
@@ -36,19 +46,11 @@ wsServer.on('request', function (request) {
         console.log('sent Message ', logs[i],' to new joinee: ', key);
     }
         
-            
-        
-        
-        
     
-
-
     connection.on('message', function(message) {
         if (message.type === 'utf8') {
           console.log('Received Message: ', message.utf8Data);
-          console.log(JSON.parse(message.utf8Data))
-
-          
+          console.log(JSON.parse(message.utf8Data));
 
           //append this message to logs if size less than 10
           if(logs.length <= 10) logs.push(message.utf8Data);
